@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xs:annotation>
+		<xs:documentation>
+		Structural Validation Result Schema - Simplified Version
+		Publication Date:	August 21, 2017		
+		Copyright (C) 2017 INTTRA, Inc.
+		
+		****************Changes***********
+		August 21	2017 Initial Publication
+		August 31	Reorganized struture.  Added trailers and Validation Status for Group, Interchange.  
+					Added SourceMessageRelease.  
+		Sept 07 	Added Source Message Controlling Agency, Interchange Control Number, 
+					Group Control Number			
+		Sept 26 	Added 5th Segment Nesting level	(L5Segment)		
+		Sept 27		Made TpIdType Attribute use Optional for Interchange, Group and Transaction Sender and Receiver 
+		Oct 02		Added 6th Segment Nesting level (L6Segment)
+		Nov 07,2017	Added error code elements for Transaction and Interchange exceptions -TransactionErrorCode, InterchangeErrorCode. 
+					Added elements for XML FA: SourceTransactionStatus, SourceTransactionShipmentIdentifier, SourceTransactionDocumentDateTime
+		Nov 15,2017	Added element for INTTRA Format / IG version: SourceMessageINTTRAVersion 
+				
+		</xs:documentation>
+	</xs:annotation>
+	<xs:element name="StructuralValidationResult" type="StructuralValidationResultType"/>
+	<xs:simpleType name="DateFormatValues">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CCYYMMDDHHMM"/>
+			<xs:enumeration value="CCYYMMDD"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ParticipantIdentifierTypeValues">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AssignedBySubmitter"/>
+			<xs:enumeration value="SCAC"/>
+			<xs:enumeration value="INTTRACompanyID"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ParticipantFunctionValues">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Carrier"/>
+			<xs:enumeration value="4FNominee"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ParticipantIdentifierType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="35"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ReferenceTypeValues">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="BookingNumber"/>
+			<xs:enumeration value="BillOfLadingNumber"/>
+			<xs:enumeration value="ConsigneeOrderNumber"/>
+			<xs:enumeration value="ContractNumber"/>
+			<xs:enumeration value="ContractPartyReferenceNumber"/>
+			<xs:enumeration value="ConsigneeReferenceNumber"/>
+			<xs:enumeration value="FreightForwarderReference"/>
+			<xs:enumeration value="PurchaseOrderNumber"/>
+			<xs:enumeration value="ShipperIdentifyingNumber"/>
+			<xs:enumeration value="InttraBookingNumber"/>
+			<xs:enumeration value="SealNumber"/>
+			<xs:enumeration value="4F"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TPIdTypeValues">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="MutuallyAgreed"/>
+			<xs:enumeration value="ThirdParty"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="StructuralValidationResultType">
+		<xs:sequence>
+			<xs:element name="ResultInterchange" type="ResultInterchangeType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ResultInterchangeType">
+		<xs:sequence>
+			<xs:element name="InterchangeReceiverId" minOccurs="1">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="TPIdType" use="optional">
+								<xs:simpleType>
+									<xs:restriction base="TPIdTypeValues"/>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="InterchangeSenderId" minOccurs="1">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="TPIdType" use="optional">
+								<xs:simpleType>
+									<xs:restriction base="TPIdTypeValues"/>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SourceInterchangeControlNumber" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ResultGroup" type="ResultGroupType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ResultTransaction" type="ResultTransactionType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="InterchangeValidationStatus" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="InterchangeErrorCode" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ResultInterchangeTrailer" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ResultGroupType">
+		<xs:sequence>
+			<xs:element name="GroupReceiverId" minOccurs="1">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="TPIdType" use="optional">
+								<xs:simpleType>
+									<xs:restriction base="TPIdTypeValues"/>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GroupSenderId" minOccurs="1">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="TPIdType" use="prohibited">
+								<xs:simpleType>
+									<xs:restriction base="TPIdTypeValues"/>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SourceGroupControlNumber" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ResultTransaction" type="ResultTransactionType" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="GroupValidationStatus" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="ResultGroupTrailer" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ResultTransactionType">
+		<xs:sequence>
+			<xs:element name="TransactionReceiverId" minOccurs="1">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="TPIdType" use="optional">
+								<xs:simpleType>
+									<xs:restriction base="TPIdTypeValues"/>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="TransactionSenderId" minOccurs="1">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="TPIdType" use="optional">
+								<xs:simpleType>
+									<xs:restriction base="TPIdTypeValues"/>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SourceControlNumber" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="SourceMessageEnvelope" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="SourceMessageReference" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="SourceMessageFormat" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="SourceMessageVersion" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="SourceMessageRelease" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="SourceMessageAgency" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="SourceMessageINTTRAVersion" type="xs:string" minOccurs="0" maxOccurs="1"/>			
+			<xs:element name="SourceTransactionStatus" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="SourceTransactionShipmentIdentifier" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="SourceTransactionDocumentDateTime" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="L1Segment" type="L1MsgSegmentType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Participants" type="ParticipantsType" minOccurs="0"/>
+			<xs:element name="References" type="ReferenceInformationType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="TransactionValidationStatus" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="TransactionErrorCode" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ResultTransactionTrailer" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MsgSegmentsType">
+		<xs:sequence>
+			<xs:element name="L1MsgSegment" type="L1MsgSegmentType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="L1MsgSegmentType">
+		<xs:sequence>
+			<xs:element name="MsgElement" type="MsgElementType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PositionInMessage" type="xs:string" minOccurs="0"/>
+			<xs:element name="Label" type="xs:string" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ErrorDescription" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ErrorURN" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="L2Segment" type="L2MsgSegmentType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="L2MsgSegmentType">
+		<xs:sequence>
+			<xs:element name="MsgElement" type="MsgElementType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PositionInMessage" type="xs:string" minOccurs="0"/>
+			<xs:element name="Label" type="xs:string" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ErrorDescription" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ErrorURN" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="L3Segment" type="L3MsgSegmentType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="L3MsgSegmentType">
+		<xs:sequence>
+			<xs:element name="MsgElement" type="MsgElementType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PositionInMessage" type="xs:string" minOccurs="0"/>
+			<xs:element name="Label" type="xs:string" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ErrorDescription" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ErrorURN" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="L4Segment" type="L4MsgSegmentType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="L4MsgSegmentType">
+		<xs:sequence>
+			<xs:element name="MsgElement" type="MsgElementType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PositionInMessage" type="xs:string" minOccurs="0"/>
+			<xs:element name="Label" type="xs:string" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ErrorDescription" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ErrorURN" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="L5Segment" type="L5MsgSegmentType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="L5MsgSegmentType">
+		<xs:sequence>
+			<xs:element name="MsgElement" type="MsgElementType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PositionInMessage" type="xs:string" minOccurs="0"/>
+			<xs:element name="Label" type="xs:string" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ErrorDescription" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ErrorURN" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="L6Segment" type="L6MsgSegmentType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="L6MsgSegmentType">
+		<xs:sequence>
+			<xs:element name="MsgElement" type="MsgElementType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PositionInMessage" type="xs:string" minOccurs="0"/>
+			<xs:element name="Label" type="xs:string" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ErrorDescription" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ErrorURN" type="xs:string" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MsgElementType">
+		<xs:sequence>
+			<xs:element name="ErrorCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="PositionInSegment" type="xs:string" minOccurs="0"/>
+			<xs:element name="SubElementPosition" type="xs:string" minOccurs="0"/>
+			<xs:element name="Label" type="xs:string" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="Value" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorDescription" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ErrorURN" type="xs:string" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MsgErrorType">
+		<xs:sequence>
+			<xs:element name="URN" type="xs:string" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="Code" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ParticipantsType">
+		<xs:sequence>
+			<xs:element name="Participant" type="ParticipantType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ParticipantType">
+		<xs:sequence>
+			<xs:element name="Function" type="ParticipantFunctionValues"/>
+			<xs:element name="Identifier" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="ParticipantIdentifierType">
+							<xs:attribute name="identifierType" type="ParticipantIdentifierTypeValues" use="required"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Name" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="70"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="NetworkID" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:int"/>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ReferenceType">
+		<xs:sequence>
+			<xs:element name="ReferenceInformation" maxOccurs="30">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:restriction base="ReferenceInformationType">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="35"/>
+						</xs:restriction>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ReferenceInformationType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="ReferenceType" use="required">
+					<xs:simpleType>
+						<xs:restriction base="ReferenceTypeValues"/>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>
